@@ -1,0 +1,34 @@
+name: jmcomic-download
+
+on:
+  workflow_dispatch:
+    inputs:
+      comic_id:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: install deps
+        run: |
+          pip install jmcomic pillow
+
+      - name: run download
+        run: |
+          python main.py "${{ inputs.comic_id }}"
+
+      - name: upload pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf
+          path: "*.pdf"
