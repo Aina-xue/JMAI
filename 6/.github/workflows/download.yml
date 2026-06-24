@@ -1,9 +1,10 @@
-name: jmcomic-download
+name: comic-download
 
 on:
   workflow_dispatch:
     inputs:
       comic_id:
+        description: "comic id"
         required: true
         type: string
 
@@ -12,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@v4
 
       - name: setup python
         uses: actions/setup-python@v5
@@ -21,14 +23,8 @@ jobs:
 
       - name: install deps
         run: |
-          pip install jmcomic pillow
+          pip install pillow
 
-      - name: run download
+      - name: run script
         run: |
           python main.py "${{ inputs.comic_id }}"
-
-      - name: upload pdf
-        uses: actions/upload-artifact@v4
-        with:
-          name: pdf
-          path: "*.pdf"
